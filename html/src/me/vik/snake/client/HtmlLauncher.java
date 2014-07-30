@@ -1,9 +1,11 @@
 package me.vik.snake.client;
 
+import me.vik.snake.Game;
+import me.vik.snake.input.KeyboardHeadInput;
+
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
-import me.vik.snake.Game;
 
 public class HtmlLauncher extends GwtApplication {
 
@@ -14,6 +16,6 @@ public class HtmlLauncher extends GwtApplication {
 
         @Override
         public ApplicationListener getApplicationListener () {
-                return new Game();
+                return new Game(new KeyboardHeadInput());
         }
 }
