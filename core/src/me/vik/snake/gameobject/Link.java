@@ -6,8 +6,8 @@ import me.vik.snake.util.RenderUtil;
 import me.vik.snake.util.Textures;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Link extends GameObject {
 
@@ -15,7 +15,7 @@ public class Link extends GameObject {
 
 	protected Direction direction = Direction.UP;
 	protected Link parent, child;
-	protected TextureRegion texRegion = Textures.link;
+	protected Texture tex = Textures.link;
 
 	public Link(float x, float y, ParticlePool particlePool) {
 		super(x, y, Color.WHITE);
@@ -148,7 +148,7 @@ public class Link extends GameObject {
 		if (child != null)
 			child.render(batch);
 
-		RenderUtil.renderGridObject(this, batch, texRegion, color);
+		RenderUtil.renderGridObject(this, batch, tex, color);
 	}
 
 }

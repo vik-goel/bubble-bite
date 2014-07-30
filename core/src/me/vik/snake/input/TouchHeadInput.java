@@ -6,16 +6,16 @@ import com.badlogic.gdx.input.GestureDetector;
 public class TouchHeadInput extends HeadInput {
 
 	private FlickListener flickListener;
-	
-	public TouchHeadInput() {
-		Gdx.input.setInputProcessor(new GestureDetector(new FlickListener()));
-	}
 
 	public void update() {
 	}
 	
 	public void setDirectionListener(DirectionListener directionListener) {
 		super.setDirectionListener(directionListener);
+		
+		if (flickListener == null) 
+			Gdx.input.setInputProcessor(new GestureDetector(flickListener = new FlickListener()));
+		
 		flickListener.setDirectionListener(directionListener);
 	}
 

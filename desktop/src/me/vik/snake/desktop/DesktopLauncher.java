@@ -10,8 +10,10 @@ public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		
-		config.width = config.height = 512;
+		config.width = 200;
+		config.height = 350;
 		config.title = "Besnaked";
+		config.resizable = false;
 		
 		new LwjglApplication(new Game(new KeyboardHeadInput()), config);
 	}

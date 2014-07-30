@@ -6,8 +6,8 @@ import me.vik.snake.gameobject.GameObject;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
@@ -15,7 +15,7 @@ public class RenderUtil {
 
 	private static ShapeRenderer sr = new ShapeRenderer();
 	
-	public static void renderGridObject(GameObject object, SpriteBatch batch, TextureRegion region, Color tint) {
+	public static void renderGridObject(GameObject object, SpriteBatch batch, Texture texture, Color tint) {
 		float x = object.getX() * Game.GRID_SIZE;
 		float y = object.getY() * Game.GRID_SIZE;
 		
@@ -23,7 +23,7 @@ public class RenderUtil {
 		batch.enableBlending();
 		batch.setColor(tint);
 		
-		batch.draw(region, x, y, Game.GRID_SIZE, Game.GRID_SIZE);
+		batch.draw(texture, x, y, Game.GRID_SIZE, Game.GRID_SIZE);
 		
 		batch.end();
 	}
@@ -42,10 +42,11 @@ public class RenderUtil {
 		sr.setColor(col, col, col, 1f);
 		
 		for (int x = minX + 1; x < maxX + minX - 1; x++)
-			sr.line(Game.GRID_SIZE, x * Game.GRID_SIZE, maxX * Game.GRID_SIZE, x * Game.GRID_SIZE);
+			sr.line(x * Game.GRID_SIZE, Game.GRID_SIZE, x * Game.GRID_SIZE, maxY * Game.GRID_SIZE);
+			
 		
 		for (int y = minY + 1; y < maxY + minY - 1; y++)
-			sr.line(y * Game.GRID_SIZE, Game.GRID_SIZE, y * Game.GRID_SIZE, maxY * Game.GRID_SIZE);
+			sr.line(Game.GRID_SIZE, y * Game.GRID_SIZE, maxX * Game.GRID_SIZE, y * Game.GRID_SIZE);
 		
 		sr.end();
 	}

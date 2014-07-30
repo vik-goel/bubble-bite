@@ -17,3 +17,4 @@
 - Add main menu ( )
 - Add difficulty selection screen and different difficulties (just change move delay of head and possibly color biasing) ( )
 - Add instructions screen ( )
+- Disable continuous rendering when not on game screen ( )

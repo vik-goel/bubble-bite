@@ -16,7 +16,7 @@ public class Head extends Link implements DirectionListener {
 	private float moveDelay = 20;
 	private float moveDelayCounter = 0;
 
-	private boolean selfCollision = false;
+	private boolean selfCollision = true;
 
 	private int minX, minY, maxX, maxY;
 
@@ -32,7 +32,7 @@ public class Head extends Link implements DirectionListener {
 		this.maxY = maxY;
 
 		currentDirection = direction;
-		texRegion = Textures.head[0];
+		tex = Textures.head[0];
 	}
 
 	public void update(float dt) {
@@ -88,28 +88,28 @@ public class Head extends Link implements DirectionListener {
 	public void onUp() {
 		if (direction != Direction.DOWN) {
 			currentDirection = Direction.UP;
-			texRegion = Textures.head[0];
+			tex = Textures.head[0];
 		}
 	}
 
 	public void onDown() {
 		if (direction != Direction.UP) {
 			currentDirection = Direction.DOWN;
-			texRegion = Textures.head[2];
+			tex = Textures.head[2];
 		}
 	}
 
 	public void onRight() {
 		if (direction != Direction.LEFT) {
 			currentDirection = Direction.RIGHT;
-			texRegion = Textures.head[1];
+			tex = Textures.head[1];
 		}
 	}
 
 	public void onLeft() {
 		if (direction != Direction.RIGHT) {
 			currentDirection = Direction.LEFT;
-			texRegion = Textures.head[3];
+			tex = Textures.head[3];
 		}
 	}
 

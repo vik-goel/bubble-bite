@@ -46,7 +46,7 @@ public class GameScreen extends RenderScreen {
 
 	public void updateScreen(float dt) {
 		if (head.hasCollidedWithSelf())
-			show();
+			game.switchToGameOverScreen();
 		
 		for (int i = 0; i < gameObjects.size(); i++)
 			gameObjects.get(i).update(dt);
