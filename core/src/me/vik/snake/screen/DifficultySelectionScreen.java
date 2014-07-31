@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Rectangle;
 
 import me.vik.snake.Game;
 import me.vik.snake.input.TouchInput;
+import me.vik.snake.util.Difficulty;
 import me.vik.snake.util.Textures;
 
 public class DifficultySelectionScreen extends RenderScreen {
@@ -21,13 +22,13 @@ public class DifficultySelectionScreen extends RenderScreen {
 	public void updateScreen(float dt) {
 		if (TouchInput.isDown() && Gdx.input.justTouched()) {
 			if (easyBounds.contains(TouchInput.getX(), TouchInput.getY()))
-				game.switchToGameScreen();
+				game.switchToGameScreen(Difficulty.EASY);
 
 			if (mediumBounds.contains(TouchInput.getX(), TouchInput.getY()))
-				game.switchToGameScreen();
+				game.switchToGameScreen(Difficulty.MEDIUM);
 
 			if (hardBounds.contains(TouchInput.getX(), TouchInput.getY()))
-				game.switchToGameScreen();
+				game.switchToGameScreen(Difficulty.HARD);
 
 			if (backBounds.contains(TouchInput.getX(), TouchInput.getY()))
 				game.switchToMenuScreen();

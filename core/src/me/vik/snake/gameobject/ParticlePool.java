@@ -29,9 +29,9 @@ public class ParticlePool {
 		}
 	}
 
-	public void render(SpriteBatch batch) {
+	public void render(SpriteBatch batch, float xOffset) {
 		for (int i = 0; i < used.size(); i++)
-			used.get(i).render(batch);
+			used.get(i).render(batch, xOffset);
 	}
 
 	public void createParticles(float x, float y, Color color, int numParticles) {
@@ -50,6 +50,10 @@ public class ParticlePool {
 			recycleParticle(i);
 	}
 
+	public int getNumUsed() {
+		return used.size();
+	}
+	
 	private void recycleParticle(int index) {
 		unused.add(used.get(index));
 		used.remove(index);

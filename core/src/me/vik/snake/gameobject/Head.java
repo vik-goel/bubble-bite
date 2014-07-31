@@ -1,24 +1,34 @@
 package me.vik.snake.gameobject;
 
+import java.util.Random;
+
 import me.vik.snake.input.DirectionListener;
 import me.vik.snake.input.HeadInput;
+import me.vik.snake.util.CameraShaker;
+import me.vik.snake.util.Difficulty;
 import me.vik.snake.util.Direction;
 import me.vik.snake.util.Textures;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 
 public class Head extends Link implements DirectionListener {
 
+	private static Sound[] explosions;
+	private static Random random = new Random();
+	
 	private Direction currentDirection;
 
 	private HeadInput headInput;
 
-	private float moveDelay = 20;
+	private float moveDelay;
 	private float moveDelayCounter = 0;
 
-	private boolean selfCollision = true;
+	private boolean selfCollision = false;
 
 	private int minX, minY, maxX, maxY;
+	private int score = 0;
 
 	public Head(int minX, int minY, int maxX, int maxY, HeadInput headInput, ParticlePool particlePool) {
 		super(maxX / 2, maxY / 2, particlePool);
@@ -58,10 +68,21 @@ public class Head extends Link implements DirectionListener {
 
 			Color removeColor;
 
+			boolean removedColor = false;
+			
 			while ((removeColor = findChain()) != null) {
 				removeColor(removeColor);
+				removedColor = true;
 			}
+			
+			if (removedColor) 
+				onRemoveLink(false);
 		}
+	}
+	
+	protected void onRemoveLink(boolean deathShake) {
+		CameraShaker.getInstance().shakeCamera(deathShake);
+		explosions[random.nextInt(explosions.length)].play();
 	}
 
 	private void warpWalls() {
@@ -111,6 +132,39 @@ public class Head extends Link implements DirectionListener {
 			currentDirection = Direction.LEFT;
 			tex = Textures.head[3];
 		}
+	}
+
+	public void setDifficulty(Difficulty difficulty) {
+		switch (difficulty) {
+		case EASY:
+			moveDelay = 40;
+			break;
+		case MEDIUM:
+			moveDelay = 30;
+			break;
+		case HARD:
+			moveDelay = 20;
+			break;
+		}
+	}
+	
+	public int getScore() {
+		return score;
+	}
+	
+	public void consumeFoodScore() {
+		score += 10;
+	}
+	
+	public void removeLinkScore() {
+		score += 15;
+	}
+	
+	static {
+		explosions = new Sound[5];
+		
+		for (int i = 0; i < explosions.length; i++)
+			explosions[i] = Gdx.audio.newSound(Gdx.files.internal("sound/explosion " + (i + 1) + ".mp3"));
 	}
 
 }

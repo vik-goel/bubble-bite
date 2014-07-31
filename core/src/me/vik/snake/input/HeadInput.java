@@ -1,5 +1,6 @@
 package me.vik.snake.input;
 
+
 public abstract class HeadInput {
 
 	protected DirectionListener directionListener;

@@ -26,11 +26,9 @@ public abstract class RenderScreen implements Screen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		batch.setProjectionMatrix(camera.combined);
-		
 
 		updateScreen(Math.max(delta / FRAME_RATE, 5f));
 		renderScreen();
-		
 	}
 
 	public void resize(int width, int height) {
@@ -45,7 +43,7 @@ public abstract class RenderScreen implements Screen {
 	public float getAspectRatio() {
 		return (float) Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
 	}
-
+	
 	public abstract void updateScreen(float dt);
 
 	public abstract void renderScreen();

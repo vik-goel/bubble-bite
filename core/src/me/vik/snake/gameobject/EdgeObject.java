@@ -12,9 +12,9 @@ public class EdgeObject extends GameObject {
 		super(x, y, Color.WHITE);
 	}
 
-	public void render(SpriteBatch batch) {
-		super.render(batch);
-		RenderUtil.renderGridObject(this, batch, Textures.edge, color);
+	public void render(SpriteBatch batch, float xOffset) {
+		super.render(batch, xOffset);
+		RenderUtil.renderGridObject(this, batch, Textures.edge, color, xOffset);
 	}
 
 }

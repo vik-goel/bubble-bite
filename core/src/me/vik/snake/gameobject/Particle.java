@@ -29,12 +29,12 @@ public class Particle extends GameObject {
 		y += dy * speed;
 	}
 
-	public void render(SpriteBatch batch) {
-		super.render(batch);
+	public void render(SpriteBatch batch, float xOffset) {
+		super.render(batch, xOffset);
 
 		batch.begin();
 		batch.setColor(color);
-		batch.draw(Textures.particle, x, y, width, height);
+		batch.draw(Textures.particle, x + xOffset, y, width, height);
 		batch.end();
 	}
 

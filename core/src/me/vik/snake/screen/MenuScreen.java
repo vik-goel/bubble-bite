@@ -27,8 +27,10 @@ public class MenuScreen extends RenderScreen {
 			if (howToBounds.contains(TouchInput.getX(), TouchInput.getY()))
 				game.switchToHowToScreen();
 			
-			if (audioBounds.contains(TouchInput.getX(), TouchInput.getY()))
+			if (audioBounds.contains(TouchInput.getX(), TouchInput.getY())) {
 				soundOn = !soundOn;
+				game.setMusicEnabled(soundOn);
+			}
 		}
 	}
 
@@ -65,6 +67,10 @@ public class MenuScreen extends RenderScreen {
 
 	public void dispose() {
 		
+	}
+	
+	public boolean isSoundOn() {
+		return soundOn;
 	}
 
 }

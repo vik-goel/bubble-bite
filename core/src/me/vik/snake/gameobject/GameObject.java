@@ -17,7 +17,7 @@ public abstract class GameObject {
 	public void update(float dt) {
 	}
 	
-	public void render(SpriteBatch batch) {
+	public void render(SpriteBatch batch, float xOffset) {
 	}
 
 	public float getX() {

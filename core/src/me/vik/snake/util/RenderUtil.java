@@ -15,8 +15,8 @@ public class RenderUtil {
 
 	private static ShapeRenderer sr = new ShapeRenderer();
 	
-	public static void renderGridObject(GameObject object, SpriteBatch batch, Texture texture, Color tint) {
-		float x = object.getX() * Game.GRID_SIZE;
+	public static void renderGridObject(GameObject object, SpriteBatch batch, Texture texture, Color tint, float xOffset) {
+		float x = object.getX() * Game.GRID_SIZE + xOffset;
 		float y = object.getY() * Game.GRID_SIZE;
 		
 		batch.begin();
@@ -32,7 +32,7 @@ public class RenderUtil {
 		return new Color(r / 255f, g / 255f, b / 255f, 1f);
 	}
 
-	public static void renderGrid(OrthographicCamera camera, int minX, int minY, int maxX, int maxY) {
+	public static void renderGrid(OrthographicCamera camera, int minX, int minY, int maxX, int maxY, float xOffset) {
 		Gdx.gl20.glLineWidth(1);
 		
 		final float col = 0.1f;
@@ -42,11 +42,11 @@ public class RenderUtil {
 		sr.setColor(col, col, col, 1f);
 		
 		for (int x = minX + 1; x < maxX + minX - 1; x++)
-			sr.line(x * Game.GRID_SIZE, Game.GRID_SIZE, x * Game.GRID_SIZE, maxY * Game.GRID_SIZE);
+			sr.line(x * Game.GRID_SIZE + xOffset, Game.GRID_SIZE, x * Game.GRID_SIZE + xOffset, maxY * Game.GRID_SIZE);
 			
 		
 		for (int y = minY + 1; y < maxY + minY - 1; y++)
-			sr.line(Game.GRID_SIZE, y * Game.GRID_SIZE, maxX * Game.GRID_SIZE, y * Game.GRID_SIZE);
+			sr.line(Game.GRID_SIZE + xOffset, y * Game.GRID_SIZE, maxX * Game.GRID_SIZE + xOffset, y * Game.GRID_SIZE);
 		
 		sr.end();
 	}

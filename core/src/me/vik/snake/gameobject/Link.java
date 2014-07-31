@@ -70,8 +70,22 @@ public class Link extends GameObject {
 		return child.getTail();
 	}
 
+	public void destroy() {
+		if (child != null)
+			child.destroy();
+		
+		remove();
+	}
+	
 	protected void remove() {
-		particlePool.createParticles(x * Game.GRID_SIZE, y * Game.GRID_SIZE, color, 10);
+		Color particleColor = color;
+		
+		if (this instanceof Head) {
+			particleColor = Color.RED;
+			((Head) this).onRemoveLink(true);
+		}
+		
+		particlePool.createParticles(x * Game.GRID_SIZE, y * Game.GRID_SIZE, particleColor, 10);
 
 		if (child != null) {
 			child.parent = parent;
@@ -80,6 +94,15 @@ public class Link extends GameObject {
 		}
 		if (parent != null)
 			parent.child = child;
+		
+		getHead().removeLinkScore();
+	}
+
+	private Head getHead() {
+		if (parent == null)
+			return (Head) this;
+		
+		return parent.getHead();
 	}
 
 	protected void removeColor(Color removeColor) {
@@ -142,13 +165,13 @@ public class Link extends GameObject {
 		return false;
 	}
 
-	public void render(SpriteBatch batch) {
-		super.render(batch);
+	public void render(SpriteBatch batch, float xOffset) {
+		super.render(batch, xOffset);
 
 		if (child != null)
-			child.render(batch);
+			child.render(batch, xOffset);
 
-		RenderUtil.renderGridObject(this, batch, tex, color);
+		RenderUtil.renderGridObject(this, batch, tex, color, xOffset);
 	}
 
 }

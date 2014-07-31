@@ -11,6 +11,8 @@ public class Textures {
 	public static Texture backButton = new Texture("back button.png");
 	public static Texture restartButton = new Texture("restart button.png");
 	public static Texture menuButton = new Texture("menu button.png");
+	public static Texture pauseButton = new Texture("pause button.png");
+	public static Texture pauseMenu = new Texture("pause menu.png");
 	
 	public static Texture easyDifficulty = new Texture("easy button.png");
 	public static Texture mediumDifficulty = new Texture("medium button.png");

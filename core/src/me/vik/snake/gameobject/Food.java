@@ -6,6 +6,8 @@ import java.util.Random;
 import me.vik.snake.util.RenderUtil;
 import me.vik.snake.util.Textures;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -26,6 +28,7 @@ public class Food extends GameObject {
 	private static ArrayList<Food> food = new ArrayList<Food>();
 
 	private static int numFoodEaten = 0;
+	private static Sound[] eat;
 
 	private Head head;
 
@@ -44,15 +47,19 @@ public class Food extends GameObject {
 
 	public void update(float dt) {
 		if (head.x == x && head.y == y) {
-			new Link(head.getTail(), color);
 			numFoodEaten++;
+			eat[random.nextInt(eat.length)].play();
+			
+			new Link(head.getTail(), color);
+			head.consumeFoodScore();
+		
 			genFood();
 		}
 	}
 
-	public void render(SpriteBatch batch) {
-		super.render(batch);
-		RenderUtil.renderGridObject(this, batch, Textures.food, color);
+	public void render(SpriteBatch batch, float xOffset) {
+		super.render(batch, xOffset);
+		RenderUtil.renderGridObject(this, batch, Textures.food, color, xOffset);
 	}
 
 	private void genFood() {
@@ -175,6 +182,13 @@ public class Food extends GameObject {
 			food.get(i).head = head;
 			food.get(i).genFood();
 		}
+	}
+	
+	static {
+		eat = new Sound[6];
+		
+		for (int i = 0; i < eat.length; i++)
+			eat[i] = Gdx.audio.newSound(Gdx.files.internal("sound/eat " + (i + 1) + ".mp3"));
 	}
 
 }
