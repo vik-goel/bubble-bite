@@ -5,18 +5,23 @@ import me.vik.snake.input.TouchInput;
 import me.vik.snake.util.Textures;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.math.Rectangle;
 
 public class MenuScreen extends RenderScreen {
 
-	private Rectangle playBounds = new Rectangle(0.1f, 0.5f, getAspectRatio() - 2 * 0.1f, 0.2f);
-	private Rectangle howToBounds = new Rectangle(playBounds.x, playBounds.y - playBounds.height - 0.05f, playBounds.width, playBounds.height);
-	private Rectangle audioBounds = new Rectangle(getAspectRatio() - 0.15f - 0.05f, 0.05f, 0.15f, 0.15f);
+	private Preferences prefs;
 	
-	private boolean soundOn = true;
+	private Rectangle playBounds = new Rectangle(0.1f, 0.45f, getAspectRatio() - 2 * 0.1f, 0.2f);
+	private Rectangle howToBounds = new Rectangle(playBounds.x, playBounds.y - playBounds.height - 0.05f, playBounds.width, playBounds.height);
+	private Rectangle audioBounds = new Rectangle(getAspectRatio() - 0.15f - 0.05f, 0.025f, 0.15f, 0.15f);
+	
+	private boolean soundOn;
 	
 	public MenuScreen(Game game) {
 		super(game);
+		prefs = Gdx.app.getPreferences(Game.PREFERENCES_KEY);
+		soundOn = prefs.getBoolean("soundOn", true);
 	}
 	
 	public void updateScreen(float dt) {
@@ -30,6 +35,8 @@ public class MenuScreen extends RenderScreen {
 			if (audioBounds.contains(TouchInput.getX(), TouchInput.getY())) {
 				soundOn = !soundOn;
 				game.setMusicEnabled(soundOn);
+				prefs.putBoolean("soundOn", soundOn);
+				prefs.flush();
 			}
 		}
 	}
@@ -39,6 +46,8 @@ public class MenuScreen extends RenderScreen {
 		batch.enableBlending();
 
 		batch.draw(Textures.background, 0, 0, getAspectRatio(), 1);
+		batch.draw(Textures.title, 0, 0.68f, getAspectRatio(), 0.3f);
+		
 		drawButtons();
 		
 		batch.end();

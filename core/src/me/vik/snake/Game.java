@@ -9,6 +9,7 @@ import me.vik.snake.screen.GameScreen;
 import me.vik.snake.screen.HowToScreen;
 import me.vik.snake.screen.MenuScreen;
 import me.vik.snake.util.Difficulty;
+import me.vik.snake.util.ScoreManager;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -18,12 +19,14 @@ import com.badlogic.gdx.audio.Music.OnCompletionListener;
 public class Game extends com.badlogic.gdx.Game {
 
 	public static final float GRID_SIZE = 0.05f;
+	public static final String PREFERENCES_KEY = "prefs-bubble";
 
 	private HeadInput headInput;
 
 	private MenuScreen menu;
 	private GameScreen game;
-	private Screen howTo, difficultySelection, gameOver;
+	private GameOverScreen gameOver;
+	private Screen howTo, difficultySelection;
 	private Music[] songs;
 	private Random random = new Random();
 
@@ -57,9 +60,11 @@ public class Game extends com.badlogic.gdx.Game {
 		songs[random.nextInt(songs.length)].play();
 	}
 
-	public void switchToGameOverScreen() {
+	public void switchToGameOverScreen(ScoreManager scoreManager) {
 		if (gameOver == null)
 			gameOver = new GameOverScreen(this);
+		
+		gameOver.setScoreManager(scoreManager);
 
 		setScreen(gameOver);
 		Gdx.graphics.requestRendering();

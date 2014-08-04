@@ -36,6 +36,7 @@ public class Particle extends GameObject {
 		batch.setColor(color);
 		batch.draw(Textures.particle, x + xOffset, y, width, height);
 		batch.end();
+		batch.setColor(1, 1, 1, 1);
 	}
 
 	public void init(float x, float y, Color color) {

@@ -16,14 +16,33 @@ public class RenderUtil {
 	private static ShapeRenderer sr = new ShapeRenderer();
 	
 	public static void renderGridObject(GameObject object, SpriteBatch batch, Texture texture, Color tint, float xOffset) {
+		renderGridObject(object, batch, texture, tint, xOffset, Direction.UP);
+	}
+	
+	@SuppressWarnings("incomplete-switch")
+	public static void renderGridObject(GameObject object, SpriteBatch batch, Texture texture, Color tint, float xOffset, Direction direction) {
 		float x = object.getX() * Game.GRID_SIZE + xOffset;
 		float y = object.getY() * Game.GRID_SIZE;
+		
+		float rotation = 0;
+		
+		switch (direction) {
+		case RIGHT:
+			rotation = 270;
+			break;
+		case DOWN:
+			rotation = 180;
+			break;
+		case LEFT:
+			rotation = 90;
+			break;
+		}
 		
 		batch.begin();
 		batch.enableBlending();
 		batch.setColor(tint);
 		
-		batch.draw(texture, x, y, Game.GRID_SIZE, Game.GRID_SIZE);
+		batch.draw(texture, x, y, Game.GRID_SIZE / 2, Game.GRID_SIZE / 2, Game.GRID_SIZE, Game.GRID_SIZE, 1, 1, rotation, 0, 0, texture.getWidth(), texture.getHeight(), false, false);
 		
 		batch.end();
 	}

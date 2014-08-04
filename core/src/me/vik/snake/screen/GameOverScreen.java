@@ -2,6 +2,7 @@ package me.vik.snake.screen;
 
 import me.vik.snake.Game;
 import me.vik.snake.input.TouchInput;
+import me.vik.snake.util.ScoreManager;
 import me.vik.snake.util.Textures;
 
 import com.badlogic.gdx.Gdx;
@@ -17,6 +18,7 @@ public class GameOverScreen extends RenderScreen {
 
 	private Rectangle playAgain = new Rectangle(0.05f, 0.05f, 0.15f, 0.15f);
 	private Rectangle menu = new Rectangle(getAspectRatio() - playAgain.x - playAgain.width, playAgain.y, playAgain.width, playAgain.height);
+	private ScoreManager scoreManager;
 
 	public GameOverScreen(Game game) {
 		super(game);
@@ -58,10 +60,10 @@ public class GameOverScreen extends RenderScreen {
 	}
 
 	private void renderScore() {
-		String score = "Score: 1658";
+		String score = "Score: " + scoreManager.getCurrentScore();
 		TextBounds scoreBounds = font.getBounds(score);
 		
-		String highScore = "High Score: 99999";
+		String highScore = "High Score: " + scoreManager.getBestScore();
 		TextBounds highScoreBounds = font.getBounds(highScore);
 
 		float scoreX = (Gdx.graphics.getWidth() - scoreBounds.width) / 2;
@@ -82,6 +84,11 @@ public class GameOverScreen extends RenderScreen {
 	private void renderButtons() {
 		batch.draw(Textures.restartButton, playAgain.x, playAgain.y, playAgain.width, playAgain.height);
 		batch.draw(Textures.menuButton, menu.x, menu.y, menu.width, menu.height);
+	}
+	
+
+	public void setScoreManager(ScoreManager scoreManager) {
+		this.scoreManager = scoreManager;
 	}
 
 	public void show() {

@@ -42,7 +42,7 @@ public class Head extends Link implements DirectionListener {
 		this.maxY = maxY;
 
 		currentDirection = direction;
-		tex = Textures.head[0];
+		tex = Textures.head;
 	}
 
 	public void update(float dt) {
@@ -107,43 +107,35 @@ public class Head extends Link implements DirectionListener {
 	}
 
 	public void onUp() {
-		if (direction != Direction.DOWN) {
+		if (direction != Direction.DOWN) 
 			currentDirection = Direction.UP;
-			tex = Textures.head[0];
-		}
 	}
 
 	public void onDown() {
-		if (direction != Direction.UP) {
+		if (direction != Direction.UP) 
 			currentDirection = Direction.DOWN;
-			tex = Textures.head[2];
-		}
 	}
 
 	public void onRight() {
-		if (direction != Direction.LEFT) {
+		if (direction != Direction.LEFT) 
 			currentDirection = Direction.RIGHT;
-			tex = Textures.head[1];
-		}
 	}
 
 	public void onLeft() {
-		if (direction != Direction.RIGHT) {
+		if (direction != Direction.RIGHT) 
 			currentDirection = Direction.LEFT;
-			tex = Textures.head[3];
-		}
 	}
 
 	public void setDifficulty(Difficulty difficulty) {
 		switch (difficulty) {
 		case EASY:
-			moveDelay = 40;
+			moveDelay = 35;
 			break;
 		case MEDIUM:
-			moveDelay = 30;
+			moveDelay = 24;
 			break;
 		case HARD:
-			moveDelay = 20;
+			moveDelay = 17;
 			break;
 		}
 	}
@@ -157,7 +149,8 @@ public class Head extends Link implements DirectionListener {
 	}
 	
 	public void removeLinkScore() {
-		score += 15;
+		if (!selfCollision)
+			score += 15;
 	}
 	
 	static {

@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 
 public class CameraShaker {
 
-	private static final float INITIAL_MAGNITUDE = 0.015f;
+	private static final float INITIAL_MAGNITUDE = 0.01f;
 	private static final float MIN_MAGNITUDE = 0.001f;
 	private static final float ENERGY_LOSS = 0.65f;
 	

@@ -13,10 +13,12 @@ import me.vik.snake.input.TouchInput;
 import me.vik.snake.util.CameraShaker;
 import me.vik.snake.util.Difficulty;
 import me.vik.snake.util.RenderUtil;
+import me.vik.snake.util.ScoreManager;
 import me.vik.snake.util.Textures;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
@@ -31,14 +33,19 @@ public class GameScreen extends RenderScreen {
 	private Head head;
 
 	private SpriteBatch fontBatch = new SpriteBatch();
-	private BitmapFont font = new BitmapFont();
+	private BitmapFont scoreFont = new BitmapFont(Gdx.files.internal("fonts/score.fnt"), Gdx.files.internal("fonts/score.png"), false);
 
+	private Difficulty difficulty;
+	
 	private int maxX, maxY;
 	private boolean destroyed;
 
 	private Rectangle pauseButtonBounds = new Rectangle(getAspectRatio() - Game.GRID_SIZE - 0.01f, 1 - Game.GRID_SIZE, Game.GRID_SIZE, Game.GRID_SIZE);
 	private PauseMenu pauseMenu;
 	private boolean paused = false;
+	
+	private String scoreOutput;
+	private int pastScore;
 
 	public GameScreen(Game game, HeadInput headInput) {
 		super(game);
@@ -85,8 +92,12 @@ public class GameScreen extends RenderScreen {
 			for (int i = 0; i < gameObjects.size(); i++)
 				gameObjects.get(i).update(dt);
 		} else {
-			if (particlePool.getNumUsed() <= 12)
-				game.switchToGameOverScreen();
+			if (particlePool.getNumUsed() <= 12) {
+				ScoreManager scoreManager = ScoreManager.getInstance(difficulty);
+				scoreManager.setCurrentScore(head.getScore());
+				scoreManager.writeBestScore();
+				game.switchToGameOverScreen(scoreManager);
+			}
 		}
 	}
 
@@ -123,11 +134,22 @@ public class GameScreen extends RenderScreen {
 	}
 
 	private void renderScore() {
-		String message = "Score: " + head.getScore();
+		if (head.getScore() != pastScore) {
+			pastScore = head.getScore();
+			scoreOutput = "Score: " + pastScore;
+		}
+		
+		final float fontHeight = 32f;
+		float height = Gdx.graphics.getHeight() * Game.GRID_SIZE;
+		
+		float scale = height / fontHeight;
+		scoreFont.setScale(scale);
+		
+		TextBounds textBounds = scoreFont.getBounds(scoreOutput);
 
 		fontBatch.begin();
-		font.setColor(1, 1, 1, 1);
-		font.draw(fontBatch, message, 5f, Gdx.graphics.getHeight() - font.getBounds(message).height / 2 + 3f);
+		scoreFont.setColor(1, 1, 1, 1);
+		scoreFont.draw(fontBatch, scoreOutput, 5f, Gdx.graphics.getHeight() - textBounds.height / 2 + 1f);
 		fontBatch.end();
 	}
 
@@ -151,6 +173,7 @@ public class GameScreen extends RenderScreen {
 		Food.reset(head);
 
 		destroyed = false;
+		pastScore = -1;
 	}
 
 	public void hide() {
@@ -159,6 +182,7 @@ public class GameScreen extends RenderScreen {
 
 	public void setDifficulty(Difficulty difficulty) {
 		head.setDifficulty(difficulty);
+		this.difficulty = difficulty;
 	}
 
 	public float getXOffset() {
@@ -166,7 +190,8 @@ public class GameScreen extends RenderScreen {
 	}
 
 	public void pause() {
-
+		if (!destroyed)
+			paused = true;
 	}
 
 	public void resume() {

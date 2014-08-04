@@ -171,7 +171,7 @@ public class Link extends GameObject {
 		if (child != null)
 			child.render(batch, xOffset);
 
-		RenderUtil.renderGridObject(this, batch, tex, color, xOffset);
+		RenderUtil.renderGridObject(this, batch, tex, color, xOffset, direction);
 	}
 
 }

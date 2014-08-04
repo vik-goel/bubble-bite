@@ -119,8 +119,8 @@ public class Food extends GameObject {
 		Color color = null;
 
 		if (shouldBias()) {
-			color = matchOtherFoodColor();
 			color = matchTailColor();
+			color = matchOtherFoodColor();
 		}
 
 		return color;
@@ -146,7 +146,7 @@ public class Food extends GameObject {
 	}
 
 	private Color matchOtherFoodColor() {
-		float biasChance = 0.2f;
+		float biasChance = 0.15f;
 
 		for (int i = 0; i < food.size(); i++)
 			if (food.get(i) != this && random.nextFloat() > biasChance)
@@ -164,7 +164,7 @@ public class Food extends GameObject {
 
 		Color color = tail.getColor();
 
-		float biasChance = 0.2f;
+		float biasChance = 0.15f;
 
 		if (tailParent.getColor().equals(color))
 			biasChance *= 2;
