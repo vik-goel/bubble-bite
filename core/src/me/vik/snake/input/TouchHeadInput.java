@@ -1,22 +1,21 @@
 package me.vik.snake.input;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.Game;
 
 public class TouchHeadInput extends HeadInput {
 
-	private FlickListener flickListener;
+	private PhoneInputDetector phoneInputDetector;
 
+	public TouchHeadInput(Game game) {
+		phoneInputDetector = new PhoneInputDetector(game);
+	}
+	
 	public void update() {
 	}
 	
 	public void setDirectionListener(DirectionListener directionListener) {
 		super.setDirectionListener(directionListener);
-		
-		if (flickListener == null) 
-			Gdx.input.setInputProcessor(new GestureDetector(flickListener = new FlickListener()));
-		
-		flickListener.setDirectionListener(directionListener);
+		phoneInputDetector.setDirectionListener(directionListener);
 	}
 
 }

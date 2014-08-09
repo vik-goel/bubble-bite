@@ -1,24 +1,23 @@
 package me.vik.snake;
 
-import java.util.Random;
-
 import me.vik.snake.input.HeadInput;
+import me.vik.snake.input.KeyboardHeadInput;
+import me.vik.snake.input.TouchHeadInput;
+import me.vik.snake.screen.CreditsScreen;
 import me.vik.snake.screen.DifficultySelectionScreen;
 import me.vik.snake.screen.GameOverScreen;
 import me.vik.snake.screen.GameScreen;
 import me.vik.snake.screen.HowToScreen;
 import me.vik.snake.screen.MenuScreen;
+import me.vik.snake.screen.RenderScreen;
 import me.vik.snake.util.Difficulty;
-import me.vik.snake.util.ScoreManager;
 
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Music.OnCompletionListener;
 
 public class Game extends com.badlogic.gdx.Game {
 
-	public static final float GRID_SIZE = 0.05f;
+	public static final float GRID_SIZE = 1f / 17f;
 	public static final String PREFERENCES_KEY = "prefs-bubble";
 
 	private HeadInput headInput;
@@ -26,45 +25,31 @@ public class Game extends com.badlogic.gdx.Game {
 	private MenuScreen menu;
 	private GameScreen game;
 	private GameOverScreen gameOver;
-	private Screen howTo, difficultySelection;
-	private Music[] songs;
-	private Random random = new Random();
+	private RenderScreen howTo, difficultySelection, credits;
 
-	public Game(HeadInput headInput) {
-		this.headInput = headInput;
-	}
+	private int frameCount = 0;
 
 	public void create() {
-		createBackgroundMusic(2);
+		if (Gdx.app.getType() == ApplicationType.Android || Gdx.app.getType() == ApplicationType.iOS)
+			headInput = new TouchHeadInput(this);
+		else headInput = new KeyboardHeadInput();
+		
 		Gdx.graphics.setContinuousRendering(false);
 		switchToMenuScreen();
 	}
 
-	private void createBackgroundMusic(int numSongs) {
-		songs = new Music[numSongs];
-		
-		for (int i = 0; i < numSongs; i++)
-			songs[i] = Gdx.audio.newMusic(Gdx.files.internal("sound/background " + (i + 1) + ".ogg"));
+	public void render() {
+		super.render();
 
-		for (int i = 0; i < numSongs; i++) {
-			final int nextSong = i + 1 == numSongs ? 0 : i + 1;
-
-			songs[i].setOnCompletionListener(new OnCompletionListener() {
-				public void onCompletion(Music music) {
-					if (menu.isSoundOn())
-						songs[nextSong].play();
-				}
-			});
-		}
-
-		songs[random.nextInt(songs.length)].play();
+		if (++frameCount == 2)
+			GameScreen.createMusic();
 	}
 
-	public void switchToGameOverScreen(ScoreManager scoreManager) {
+	public void switchToGameOverScreen(Difficulty difficulty) {
 		if (gameOver == null)
 			gameOver = new GameOverScreen(this);
-		
-		gameOver.setScoreManager(scoreManager);
+
+		gameOver.setScoreManager(difficulty);
 
 		setScreen(gameOver);
 		Gdx.graphics.requestRendering();
@@ -91,7 +76,7 @@ public class Game extends com.badlogic.gdx.Game {
 			game = new GameScreen(this, headInput);
 
 		setScreen(game);
-		game.setDifficulty(difficulty);
+		game.init(difficulty, menu.isSoundOn());
 	}
 
 	public void switchToHowToScreen() {
@@ -102,11 +87,12 @@ public class Game extends com.badlogic.gdx.Game {
 		Gdx.graphics.requestRendering();
 	}
 
-	public void setMusicEnabled(boolean enabled) {
-		for (int i = 0; i < songs.length; i++)
-			songs[i].stop();
+	public void switchToCreditsScreen() {
+		if (credits == null)
+			credits = new CreditsScreen(this);
 
-		if (enabled)
-			songs[random.nextInt(songs.length)].play();
+		setScreen(credits);
+		Gdx.graphics.requestRendering();
 	}
+
 }

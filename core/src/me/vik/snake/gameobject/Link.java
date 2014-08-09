@@ -1,5 +1,8 @@
 package me.vik.snake.gameobject;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import me.vik.snake.Game;
 import me.vik.snake.util.Direction;
 import me.vik.snake.util.RenderUtil;
@@ -11,6 +14,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Link extends GameObject {
 
+	private static Random random = new Random();
+	private static ArrayList<Link> removedLinks = new ArrayList<Link>(150);
 	private static ParticlePool particlePool;
 
 	protected Direction direction = Direction.UP;
@@ -73,20 +78,31 @@ public class Link extends GameObject {
 	public void destroy() {
 		if (child != null)
 			child.destroy();
-		
-		remove();
+
+		remove(0);
 	}
-	
-	protected void remove() {
+
+	protected void remove(int linkNum) {
+		removedLinks.add(this);
+
+		createParticles();
+		spliceSelfOutOfChain();
+
+		getHead().removeLinkScore(linkNum);
+	}
+
+	private void createParticles() {
 		Color particleColor = color;
-		
+
 		if (this instanceof Head) {
 			particleColor = Color.RED;
-			((Head) this).onRemoveLink(true);
+			((Head) this).onRemoveLink(true, 10);
 		}
-		
-		particlePool.createParticles(x * Game.GRID_SIZE, y * Game.GRID_SIZE, particleColor, 10);
 
+		particlePool.createParticles(x * Game.GRID_SIZE, y * Game.GRID_SIZE, particleColor, random.nextInt(5) + 5);
+	}
+	
+	private void spliceSelfOutOfChain() {
 		if (child != null) {
 			child.parent = parent;
 			child.x = x;
@@ -94,23 +110,23 @@ public class Link extends GameObject {
 		}
 		if (parent != null)
 			parent.child = child;
-		
-		getHead().removeLinkScore();
 	}
 
 	private Head getHead() {
 		if (parent == null)
 			return (Head) this;
-		
+
 		return parent.getHead();
 	}
 
-	protected void removeColor(Color removeColor) {
+	protected int removeColor(Color removeColor, int linkNum) {
 		if (child != null)
-			child.removeColor(removeColor);
+			linkNum = child.removeColor(removeColor, linkNum);
 
 		if (color.equals(removeColor))
-			remove();
+			remove(++linkNum);
+
+		return linkNum;
 	}
 
 	protected Color findChain() {
@@ -172,6 +188,14 @@ public class Link extends GameObject {
 			child.render(batch, xOffset);
 
 		RenderUtil.renderGridObject(this, batch, tex, color, xOffset, direction);
+	}
+	
+	public Direction getDirection() {
+		return direction;
+	}
+
+	public static void resetRemovedLinks() {
+		removedLinks.clear();
 	}
 
 }

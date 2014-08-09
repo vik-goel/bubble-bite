@@ -12,9 +12,10 @@ public class MenuScreen extends RenderScreen {
 
 	private Preferences prefs;
 	
-	private Rectangle playBounds = new Rectangle(0.1f, 0.45f, getAspectRatio() - 2 * 0.1f, 0.2f);
-	private Rectangle howToBounds = new Rectangle(playBounds.x, playBounds.y - playBounds.height - 0.05f, playBounds.width, playBounds.height);
+	private Rectangle playBounds = new Rectangle(0.1f, 0.425f, getAspectRatio() - 2 * 0.1f, 0.19f);
+	private Rectangle howToBounds = new Rectangle(playBounds.x, playBounds.y - playBounds.height - 0.025f, playBounds.width, playBounds.height);
 	private Rectangle audioBounds = new Rectangle(getAspectRatio() - 0.15f - 0.05f, 0.025f, 0.15f, 0.15f);
+	private Rectangle creditsBounds = new Rectangle(getAspectRatio() * 0.06f, 0.035f, 0.13f * (float)Textures.creditsButton.getWidth() / (float)Textures.creditsButton.getHeight(), 0.13f);
 	
 	private boolean soundOn;
 	
@@ -34,10 +35,12 @@ public class MenuScreen extends RenderScreen {
 			
 			if (audioBounds.contains(TouchInput.getX(), TouchInput.getY())) {
 				soundOn = !soundOn;
-				game.setMusicEnabled(soundOn);
 				prefs.putBoolean("soundOn", soundOn);
 				prefs.flush();
 			}
+			
+			if (creditsBounds.contains(TouchInput.getX(), TouchInput.getY()))
+				game.switchToCreditsScreen();
 		}
 	}
 
@@ -46,7 +49,7 @@ public class MenuScreen extends RenderScreen {
 		batch.enableBlending();
 
 		batch.draw(Textures.background, 0, 0, getAspectRatio(), 1);
-		batch.draw(Textures.title, 0, 0.68f, getAspectRatio(), 0.3f);
+		batch.draw(Textures.title, 0, 0.63f, getAspectRatio(), 0.37f);
 		
 		drawButtons();
 		
@@ -57,6 +60,7 @@ public class MenuScreen extends RenderScreen {
 		batch.draw(Textures.playOff, playBounds.x, playBounds.y, playBounds.width, playBounds.height);
 		batch.draw(Textures.howToOff, howToBounds.x, howToBounds.y, howToBounds.width, howToBounds.height);
 		batch.draw(soundOn ? Textures.soundOn : Textures.soundOff, audioBounds.x, audioBounds.y, audioBounds.width, audioBounds.height);
+		batch.draw(Textures.creditsButton, creditsBounds.x, creditsBounds.y, creditsBounds.width, creditsBounds.height);
 	}
 
 	public void show() {
@@ -80,6 +84,9 @@ public class MenuScreen extends RenderScreen {
 	
 	public boolean isSoundOn() {
 		return soundOn;
+	}
+	
+	public void onBackPressed() {
 	}
 
 }

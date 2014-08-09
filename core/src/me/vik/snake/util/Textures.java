@@ -9,10 +9,15 @@ public class Textures {
 	public static Texture soundOff = createTexture("sound off.png");
 	
 	public static Texture backButton = createTexture("back button.png");
+	public static Texture forwardButton = createTexture("forward button.png");
 	public static Texture restartButton = createTexture("restart button.png");
 	public static Texture menuButton = createTexture("menu button.png");
 	public static Texture pauseButton = createTexture("pause button.png");
+	public static Texture creditsButton = createTexture("credits button.png");
 	public static Texture pauseMenu = createTexture("pause menu.png");
+	public static Texture instructions1 = createTexture("instructions1.png");
+	public static Texture instructions2 = createTexture("instructions2.png");
+	public static Texture credits = createTexture("credits.png");
 	public static Texture title = createTexture("title.png");
 	
 	public static Texture easyDifficulty = createTexture("easy button.png");
@@ -24,11 +29,11 @@ public class Textures {
 	
 	public static Texture gameOverRibbon = createTexture("game over ribbon.png");
 	public static Texture background = createTexture("background.png");
+	public static Texture scoreBackground = createTexture("score_background.png");
 	
 	public static Texture head = createTexture("head up.png");
 	public static Texture link = createTexture("link with gradient.png");
 	public static Texture food = createTexture("food.png");
-	public static Texture particle = createTexture("particle.png");
 	public static Texture edge = createTexture("edge.png");
 
 	private static Texture createTexture(String fileName) {

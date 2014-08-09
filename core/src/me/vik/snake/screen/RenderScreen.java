@@ -10,8 +10,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public abstract class RenderScreen implements Screen {
 
-	private static final float FRAME_RATE = 60f;
-
 	protected Game game;
 	protected OrthographicCamera camera;
 	protected SpriteBatch batch;
@@ -19,6 +17,13 @@ public abstract class RenderScreen implements Screen {
 	public RenderScreen(Game game) {
 		this.game = game;
 		batch = new SpriteBatch();
+		
+		float aspectRatio = getAspectRatio();
+
+		camera = new OrthographicCamera(aspectRatio, 1);
+		camera.position.x = aspectRatio / 2;
+		camera.position.y = 0.5f;
+		camera.update();
 	}
 
 	public void render(float delta) {
@@ -27,17 +32,12 @@ public abstract class RenderScreen implements Screen {
 
 		batch.setProjectionMatrix(camera.combined);
 
-		updateScreen(Math.max(delta / FRAME_RATE, 5f));
+		updateScreen(Math.min(Gdx.graphics.getRawDeltaTime() * 60f, 3f));
 		renderScreen();
 	}
 
 	public void resize(int width, int height) {
-		float aspectRatio = getAspectRatio();
 
-		camera = new OrthographicCamera(aspectRatio, 1);
-		camera.position.x = aspectRatio / 2;
-		camera.position.y = 0.5f;
-		camera.update();
 	}
 	
 	public float getAspectRatio() {
@@ -47,5 +47,7 @@ public abstract class RenderScreen implements Screen {
 	public abstract void updateScreen(float dt);
 
 	public abstract void renderScreen();
+
+	public abstract void onBackPressed();
 
 }

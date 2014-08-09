@@ -72,4 +72,7 @@ public class DifficultySelectionScreen extends RenderScreen {
 
 	}
 
+	public void onBackPressed() {
+		game.switchToMenuScreen();
+	}
 }

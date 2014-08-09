@@ -2,6 +2,7 @@ package me.vik.snake.screen;
 
 import me.vik.snake.Game;
 import me.vik.snake.input.TouchInput;
+import me.vik.snake.util.Difficulty;
 import me.vik.snake.util.Textures;
 import me.vik.snake.util.Util;
 
@@ -13,7 +14,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 public class PauseMenu {
 
-	private static final float ACCELERATION = 0.008f;
+	private static final float ACCELERATION = 0.01f;
 
 	private Game game;
 	private ShapeRenderer sr = new ShapeRenderer();
@@ -26,6 +27,8 @@ public class PauseMenu {
 	private float buttonY = 0.475f;
 	private float buttonRadius = 0.035f;
 
+	private Difficulty difficulty;
+	
 	public PauseMenu(Game game) {
 		this.game = game;
 	}
@@ -64,7 +67,7 @@ public class PauseMenu {
 		else if (Util.distance(x, y, restartX, buttonY) < buttonRadius) {
 			enabled = false;
 			alpha = 0;
-			game.switchToDifficultySelectionScreen();
+			game.switchToGameScreen(difficulty);
 		}
 
 		else if (Util.distance(x, y, menuX, buttonY) < buttonRadius) {
@@ -116,10 +119,17 @@ public class PauseMenu {
 		return enabled;
 	}
 
-	public void setEnabled(boolean enabled) {
+	public void setEnabled(boolean enabled, boolean hardPause) {
 		this.enabled = enabled;
 		alpha = enabled ? 0 : 1;
 		alphaSpeed = 0;
+		
+		if (hardPause)
+			alpha = 1;
+	}
+	
+	public void setDifficulty(Difficulty difficulty) {
+		this.difficulty = difficulty;
 	}
 
 }

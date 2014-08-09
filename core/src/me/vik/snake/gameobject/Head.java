@@ -1,7 +1,5 @@
 package me.vik.snake.gameobject;
 
-import java.util.Random;
-
 import me.vik.snake.input.DirectionListener;
 import me.vik.snake.input.HeadInput;
 import me.vik.snake.util.CameraShaker;
@@ -16,8 +14,7 @@ import com.badlogic.gdx.graphics.Color;
 public class Head extends Link implements DirectionListener {
 
 	private static Sound[] explosions;
-	private static Random random = new Random();
-	
+
 	private Direction currentDirection;
 
 	private HeadInput headInput;
@@ -30,12 +27,14 @@ public class Head extends Link implements DirectionListener {
 	private int minX, minY, maxX, maxY;
 	private int score = 0;
 
+	private boolean soundOn = false;
+
 	public Head(int minX, int minY, int maxX, int maxY, HeadInput headInput, ParticlePool particlePool) {
 		super(maxX / 2, maxY / 2, particlePool);
 
 		this.headInput = headInput;
 		headInput.setDirectionListener(this);
-		
+
 		this.minX = minX;
 		this.minY = minY;
 		this.maxX = maxX;
@@ -63,26 +62,32 @@ public class Head extends Link implements DirectionListener {
 			getTail().moveToParent();
 			move(false);
 
-			warpWalls();
-			checkSelfCollisions();
-
 			Color removeColor;
 
 			boolean removedColor = false;
-			
+			int linkNum = 0;
+
 			while ((removeColor = findChain()) != null) {
-				removeColor(removeColor);
+				linkNum = removeColor(removeColor, linkNum);
 				removedColor = true;
 			}
-			
-			if (removedColor) 
-				onRemoveLink(false);
+
+			if (removedColor)
+				onRemoveLink(false, linkNum);
+
+			warpWalls();
+			checkSelfCollisions();
 		}
 	}
-	
-	protected void onRemoveLink(boolean deathShake) {
+
+	protected void onRemoveLink(boolean deathShake, int linkNum) {
 		CameraShaker.getInstance().shakeCamera(deathShake);
-		explosions[random.nextInt(explosions.length)].play();
+
+		if (soundOn) {
+			if (linkNum > 5 || deathShake)
+				explosions[1].play();
+			else explosions[0].play();
+		}
 	}
 
 	private void warpWalls() {
@@ -107,55 +112,59 @@ public class Head extends Link implements DirectionListener {
 	}
 
 	public void onUp() {
-		if (direction != Direction.DOWN) 
+		if (direction != Direction.DOWN)
 			currentDirection = Direction.UP;
 	}
 
 	public void onDown() {
-		if (direction != Direction.UP) 
+		if (direction != Direction.UP)
 			currentDirection = Direction.DOWN;
 	}
 
 	public void onRight() {
-		if (direction != Direction.LEFT) 
+		if (direction != Direction.LEFT)
 			currentDirection = Direction.RIGHT;
 	}
 
 	public void onLeft() {
-		if (direction != Direction.RIGHT) 
+		if (direction != Direction.RIGHT)
 			currentDirection = Direction.LEFT;
 	}
 
 	public void setDifficulty(Difficulty difficulty) {
 		switch (difficulty) {
 		case EASY:
-			moveDelay = 35;
+			moveDelay = 35 / 5f;
 			break;
 		case MEDIUM:
-			moveDelay = 24;
+			moveDelay = 24 / 5f;
 			break;
 		case HARD:
-			moveDelay = 17;
+			moveDelay = 17 / 5f;
 			break;
 		}
 	}
-	
+
 	public int getScore() {
 		return score;
 	}
-	
+
 	public void consumeFoodScore() {
-		score += 10;
+		score += 2;
 	}
-	
-	public void removeLinkScore() {
+
+	public void removeLinkScore(int linkNum) {
 		if (!selfCollision)
-			score += 15;
+			score += linkNum;
 	}
-	
-	static {
-		explosions = new Sound[5];
-		
+
+	public void setMusicEnabled(boolean soundOn) {
+		this.soundOn = soundOn;
+	}
+
+	public static void createMusic() {
+		explosions = new Sound[2];
+
 		for (int i = 0; i < explosions.length; i++)
 			explosions[i] = Gdx.audio.newSound(Gdx.files.internal("sound/explosion " + (i + 1) + ".mp3"));
 	}

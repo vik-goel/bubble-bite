@@ -10,8 +10,8 @@ public class CameraShaker {
 	private static final float MIN_MAGNITUDE = 0.001f;
 	private static final float ENERGY_LOSS = 0.65f;
 	
-	private static final float MIN_SHAKE_TIME = 8;
-	private static final float MAX_SHAKE_TIME = 16;
+	private static final float MIN_SHAKE_TIME = 8 / 5f;
+	private static final float MAX_SHAKE_TIME = 16 / 5f;
 	
 	private static CameraShaker instance = new CameraShaker();
 	

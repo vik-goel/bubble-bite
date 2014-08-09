@@ -3,18 +3,25 @@ package me.vik.snake.gameobject;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 public class ParticlePool {
 
 	private ArrayList<Particle> used, unused;
+	private ShapeRenderer sr;
 
-	public ParticlePool(int numParticles) {
+	public ParticlePool(int numParticles, OrthographicCamera camera) {
+		sr = new ShapeRenderer();
+		sr.setProjectionMatrix(camera.combined);
+		
 		used = new ArrayList<Particle>(numParticles);
 		unused = new ArrayList<Particle>(numParticles);
 
 		for (int i = 0; i < numParticles; i++)
-			unused.add(new Particle());
+			unused.add(new Particle(sr));
 	}
 
 	public void update(float dt) {
@@ -30,8 +37,12 @@ public class ParticlePool {
 	}
 
 	public void render(SpriteBatch batch, float xOffset) {
+		sr.begin(ShapeType.Filled);
+		
 		for (int i = 0; i < used.size(); i++)
 			used.get(i).render(batch, xOffset);
+		
+		sr.end();
 	}
 
 	public void createParticles(float x, float y, Color color, int numParticles) {
