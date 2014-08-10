@@ -231,7 +231,7 @@ public class GameScreen extends RenderScreen {
 	}
 
 	public static void createMusic() {
-		final int numSongs = 2;
+		final int numSongs = 1;
 
 		songs = new Music[numSongs];
 

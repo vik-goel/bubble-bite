@@ -10,6 +10,7 @@ import me.vik.snake.screen.GameScreen;
 import me.vik.snake.screen.HowToScreen;
 import me.vik.snake.screen.MenuScreen;
 import me.vik.snake.screen.RenderScreen;
+import me.vik.snake.util.Ad;
 import me.vik.snake.util.Difficulty;
 
 import com.badlogic.gdx.Application.ApplicationType;
@@ -26,7 +27,9 @@ public class Game extends com.badlogic.gdx.Game {
 	private GameScreen game;
 	private GameOverScreen gameOver;
 	private RenderScreen howTo, difficultySelection, credits;
-
+	
+	private Ad ad;
+	
 	private int frameCount = 0;
 
 	public void create() {
@@ -52,6 +55,10 @@ public class Game extends com.badlogic.gdx.Game {
 		gameOver.setScoreManager(difficulty);
 
 		setScreen(gameOver);
+		
+		if (ad != null)
+			ad.showIfLoaded();
+		
 		Gdx.graphics.requestRendering();
 	}
 
@@ -74,6 +81,9 @@ public class Game extends com.badlogic.gdx.Game {
 	public void switchToGameScreen(Difficulty difficulty) {
 		if (game == null)
 			game = new GameScreen(this, headInput);
+		
+		if (ad != null)
+			ad.load();
 
 		setScreen(game);
 		game.init(difficulty, menu.isSoundOn());
@@ -93,6 +103,11 @@ public class Game extends com.badlogic.gdx.Game {
 
 		setScreen(credits);
 		Gdx.graphics.requestRendering();
+	}
+	
+	public void setAdHandler(Ad ad) {
+		this.ad = ad;
+		ad.create("ca-app-pub-3934076033972627/1676871398");
 	}
 
 }
